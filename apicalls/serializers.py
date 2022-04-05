@@ -17,9 +17,17 @@ class MediaContentSerializer(serializers.ModelSerializer):
         model = MediaContent
         fields = "__all__"    
 
+class SectionMainSerializer(serializers.ModelSerializer):
+    mediaContent = MediaContentSerializer(many=True,read_only=True)
+
+    class Meta:
+        model = Section
+        fields = "__all__"
+
+
 class ProjectMainSerializer(serializers.ModelSerializer):
 
-    sections = SectionSerializer(many=True,read_only=True)
+    sections = SectionMainSerializer(many=True,read_only=True)
 
     class Meta:
         model = Project
