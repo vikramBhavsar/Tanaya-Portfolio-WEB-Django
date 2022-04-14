@@ -1,9 +1,11 @@
 from ast import Delete
 from urllib import response
-from django.http import HttpResponse
+from django.http import Http404, HttpResponse
 from django.shortcuts import render
 from rest_framework.parsers import MultiPartParser
 from rest_framework.response import Response
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.views import APIView
 from rest_framework import viewsets, permissions, mixins, generics
 from .serializers import ProjectSerializer, MediaContentSerializer, SectionSerializer,ProjectMainSerializer
 from .models import MediaContent, Project,Section
@@ -12,10 +14,25 @@ from .models import MediaContent, Project,Section
 def index(request):
     return HttpResponse("hello World")
 
-# CRUD operation for Project models
-class ProjectAPICRUD(generics.ListAPIView, mixins.CreateModelMixin,mixins.DestroyModelMixin,mixins.UpdateModelMixin):
+
+
+# CRUD operation for Project models - ( ONLY AUTHENTICATED )
+class ProjectAPICRUD(APIView, mixins.CreateModelMixin,mixins.DestroyModelMixin,mixins.UpdateModelMixin):
     queryset = Project.objects.all()
     serializer_class = ProjectSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_object(self, pk):
+        try:
+            return Project.objects.get(pk=pk)
+        except Project.DoesNotExist:
+            raise Http404
+
+    def get(self, request, pk, format=None):
+        project = self.get_object(pk)
+        serializer = ProjectMainSerializer(project)
+        return Response(serializer.data)
+
 
     # for Creating a new project
     def post(self, request, *args, **kwargs):
@@ -29,11 +46,18 @@ class ProjectAPICRUD(generics.ListAPIView, mixins.CreateModelMixin,mixins.Destro
     def delete(self, request, *args, **kwargs):
         return self.destroy(request,*args,**kwargs)
 
+
+class ProjectList(generics.ListAPIView):
+    queryset = Project.objects.all()
+    serializer_class = ProjectSerializer
+
+
 # CRD operation for MediaContent Model
 class MediaContentAPICRUD(generics.ListAPIView,mixins.CreateModelMixin, mixins.DestroyModelMixin,mixins.RetrieveModelMixin):
     parser_classes = [MultiPartParser]
     serializer_class = MediaContentSerializer
     queryset = MediaContent.objects.all()
+    permission_classes = [IsAuthenticated]
 
     # getting existing section details
     def get(self, request, *args, **kwargs):
@@ -49,6 +73,7 @@ class MediaContentAPICRUD(generics.ListAPIView,mixins.CreateModelMixin, mixins.D
 class SectionAPICRUD(generics.ListAPIView, mixins.CreateModelMixin,mixins.DestroyModelMixin,mixins.UpdateModelMixin, mixins.RetrieveModelMixin):
     serializer_class = SectionSerializer
     queryset = Section.objects.all()
+    permission_classes = [IsAuthenticated]
 
     # getting existing section details
     def get(self, request, *args, **kwargs):
