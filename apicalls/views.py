@@ -1,38 +1,31 @@
 from ast import Delete
+from json import JSONDecoder
 from urllib import response
 from django.http import Http404, HttpResponse
 from django.shortcuts import render
-from rest_framework.parsers import MultiPartParser
+from rest_framework import status
+from rest_framework.decorators import api_view,parser_classes
+from rest_framework.parsers import MultiPartParser,JSONParser
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
-from rest_framework.views import APIView
 from rest_framework import viewsets, permissions, mixins, generics
-from .serializers import ProjectSerializer, MediaContentSerializer, SectionSerializer,ProjectMainSerializer
-from .models import MediaContent, Project,Section
+from .serializers import AboutSerializer, ArtProjectMainSerializer, BlogMainSerializer, BlogSectionSerializer, BlogSerializer, ProjectSerializer, MediaContentSerializer, SectionSerializer,ProjectMainSerializer,MediaGroupSectionSerializer
+from .models import About, ArtProject, Blog, BlogSection, MediaContent, MediaGroupSection, Project,Section
+
 
 # Create your views here.
 def index(request):
     return HttpResponse("hello World")
 
-
-
 # CRUD operation for Project models - ( ONLY AUTHENTICATED )
-class ProjectAPICRUD(APIView, mixins.CreateModelMixin,mixins.DestroyModelMixin,mixins.UpdateModelMixin):
+class  ProjectAPICRUD(generics.ListAPIView, mixins.CreateModelMixin,mixins.DestroyModelMixin,mixins.UpdateModelMixin,mixins.RetrieveModelMixin):
     queryset = Project.objects.all()
-    serializer_class = ProjectSerializer
+    serializer_class = ProjectMainSerializer
     permission_classes = [IsAuthenticated]
 
-    def get_object(self, pk):
-        try:
-            return Project.objects.get(pk=pk)
-        except Project.DoesNotExist:
-            raise Http404
-
-    def get(self, request, pk, format=None):
-        project = self.get_object(pk)
-        serializer = ProjectMainSerializer(project)
-        return Response(serializer.data)
-
+    # get new Project
+    def get(self, request, *args, **kwargs):
+        return self.retrieve(request, *args, **kwargs)
 
     # for Creating a new project
     def post(self, request, *args, **kwargs):
@@ -44,17 +37,26 @@ class ProjectAPICRUD(APIView, mixins.CreateModelMixin,mixins.DestroyModelMixin,m
 
     # for deleting an existing project
     def delete(self, request, *args, **kwargs):
+        print("Inside destroy method %s" % kwargs)
         return self.destroy(request,*args,**kwargs)
 
+class ProjectDetails(generics.ListAPIView, mixins.RetrieveModelMixin):
+    queryset = Project.objects.all()
+    serializer_class = ProjectMainSerializer
+    permission_classes = [IsAuthenticated]
+
+    # get new Project
+    def get(self, request, *args, **kwargs):
+        return self.retrieve(request, *args, **kwargs)
 
 class ProjectList(generics.ListAPIView):
     queryset = Project.objects.all()
     serializer_class = ProjectSerializer
-
+    permission_classes = [IsAuthenticated]
 
 # CRD operation for MediaContent Model
 class MediaContentAPICRUD(generics.ListAPIView,mixins.CreateModelMixin, mixins.DestroyModelMixin,mixins.RetrieveModelMixin):
-    parser_classes = [MultiPartParser]
+    parser_classes = [MultiPartParser,JSONParser]
     serializer_class = MediaContentSerializer
     queryset = MediaContent.objects.all()
     permission_classes = [IsAuthenticated]
@@ -96,4 +98,145 @@ class AllDataList(generics.ListAPIView,mixins.RetrieveModelMixin):
     queryset = Project.objects.all()
     serializer_class = ProjectMainSerializer
 
+# This view will show all the data combined, includes projects, sections and media content
+class AllProjectList(generics.ListAPIView,mixins.RetrieveModelMixin):
+    queryset = Project.objects.all()
+    serializer_class = ProjectSerializer
 
+# This view will show all data combined for Single Project (Without Authentication)
+class ProjectDetailsWithoutAuth(generics.ListAPIView, mixins.RetrieveModelMixin):
+    queryset = Project.objects.all()
+    serializer_class = ProjectMainSerializer
+
+    # get new Project
+    def get(self, request, *args, **kwargs):
+        return self.retrieve(request, *args, **kwargs)
+
+
+
+
+#########################################################
+#########################################################
+# BELOW WILL CONTAIN ART EDUCATION VIEWS
+#########################################################
+#########################################################
+
+class AllArtProject(generics.ListAPIView,mixins.RetrieveModelMixin):
+    queryset = ArtProject.objects.all()
+    serializer_class = ArtProjectMainSerializer
+
+    # get new Project
+    def get(self, request, *args, **kwargs):
+        return self.retrieve(request, *args, **kwargs)
+
+
+class ArtProjectList(generics.ListAPIView):
+    queryset = ArtProject.objects.all()
+    serializer_class = ProjectSerializer
+
+
+
+#########################################################
+#########################################################
+# BELOW WILL CONTAIN BLOGGING RELATED VIEWS
+#########################################################
+#########################################################
+
+
+### for parent main blog
+class SingleBlog(generics.ListAPIView,mixins.RetrieveModelMixin,mixins.DestroyModelMixin):
+    queryset = Blog.objects.all()
+    serializer_class = BlogSerializer
+
+    # get blog
+    def get(self, request, *args, **kwargs):
+        return self.retrieve(request, *args, **kwargs)
+
+    # deleting existing blog
+    def delete(self, request, *args, **kwargs):
+        return self.destroy(request,*args,**kwargs)
+
+class CreateBlog(generics.ListAPIView, mixins.CreateModelMixin):
+    queryset = Blog.objects.all()
+    serializer_class = BlogSerializer
+
+    # Creating new blog
+    def post(self, request, *args, **kwargs):
+        return self.create(request,*args,**kwargs)
+
+
+#### FOR sections inside blog
+class SingleBlogSection(generics.ListAPIView,mixins.RetrieveModelMixin,mixins.UpdateModelMixin,mixins.DestroyModelMixin):
+    queryset = BlogSection.objects.all()
+    serializer_class = BlogSectionSerializer
+
+    # get blog
+    def get(self, request, *args, **kwargs):
+        return self.retrieve(request, *args, **kwargs)
+
+    # updating existing blog section
+    def put(self, request, *args, **kwargs):
+        return self.update(request,*args,**kwargs)
+
+    # deleting existing blog
+    def delete(self, request, *args, **kwargs):
+        return self.destroy(request,*args,**kwargs)
+
+
+class GetBlogList(generics.ListAPIView):
+    queryset = Blog.objects.all()
+    serializer_class = BlogSerializer
+
+class CreateBlogSection(generics.ListAPIView, mixins.CreateModelMixin):
+    queryset = BlogSection.objects.all()
+    serializer_class = BlogSectionSerializer
+
+    # Creating new blog
+    def post(self, request, *args, **kwargs):
+        return self.create(request,*args,**kwargs)
+
+
+class CreateBlogSection(generics.ListAPIView, mixins.CreateModelMixin):
+    parser_classes = [MultiPartParser,JSONParser]
+    queryset = BlogSection.objects.all()
+    serializer_class = BlogSectionSerializer
+
+    # Creating new blog
+    def post(self, request, *args, **kwargs):
+        return self.create(request,*args,**kwargs)
+
+
+class CreateMediaGroupBlogSection(generics.ListAPIView, mixins.CreateModelMixin):
+    parser_classes = [MultiPartParser,JSONParser]
+    queryset = MediaGroupSection.objects.all()
+    serializer_class = MediaGroupSectionSerializer
+
+    # Creating new blog
+    def post(self, request, *args, **kwargs):
+        return self.create(request,*args,**kwargs)
+
+
+class DeleteMediaGroupBlogSection(generics.ListAPIView, mixins.DestroyModelMixin):
+    queryset = MediaGroupSection.objects.all()
+    serializer_class = MediaGroupSectionSerializer
+
+    def delete(self,request, *args, **kwargs):
+        return self.destroy(request,*args,**kwargs)
+
+
+# Getting detail information about the blog
+class SingleBlogDetail(generics.ListAPIView,mixins.RetrieveModelMixin):
+    queryset = Blog.objects.all()
+    serializer_class = BlogMainSerializer
+
+    # get blog
+    def get(self, request, *args, **kwargs):
+        return self.retrieve(request, *args, **kwargs)
+
+
+
+
+### misceleenius
+class GetAboutList(generics.ListAPIView):
+    queryset = About.objects.all()
+    serializer_class = AboutSerializer

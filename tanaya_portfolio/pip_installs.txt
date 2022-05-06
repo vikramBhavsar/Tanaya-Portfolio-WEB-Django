@@ -2,3 +2,4 @@ pip install djangorestframework
 pip install Pillow
 pip install django-cors-headers
 pip install djangorestframework-simplejwt
+pip install django-cleanup
