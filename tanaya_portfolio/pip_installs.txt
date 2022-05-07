@@ -3,3 +3,6 @@ pip install Pillow
 pip install django-cors-headers
 pip install djangorestframework-simplejwt
 pip install django-cleanup
+pip install boto3
+pip install django-storages
+pip install python-dotenv

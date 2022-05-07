@@ -115,6 +115,7 @@ class BlogSection(models.Model):
 class MediaGroupSection(models.Model):
     BlogSectionID = models.ForeignKey(BlogSection, on_delete=models.CASCADE,related_name='media_group_section')
     mediaURL = models.ImageField(upload_to='blogs/%H_%M_%S_%f',blank=True)
+    mediaDes= models.CharField(max_length=500,blank=True)
 
 
 def update_about_filename(instance, filename):
