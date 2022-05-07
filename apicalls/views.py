@@ -147,6 +147,7 @@ class ArtProjectList(generics.ListAPIView):
 class SingleBlog(generics.ListAPIView,mixins.RetrieveModelMixin,mixins.DestroyModelMixin):
     queryset = Blog.objects.all()
     serializer_class = BlogSerializer
+    permission_classes = [IsAuthenticated]
 
     # get blog
     def get(self, request, *args, **kwargs):
@@ -159,6 +160,7 @@ class SingleBlog(generics.ListAPIView,mixins.RetrieveModelMixin,mixins.DestroyMo
 class CreateBlog(generics.ListAPIView, mixins.CreateModelMixin):
     queryset = Blog.objects.all()
     serializer_class = BlogSerializer
+    permission_classes = [IsAuthenticated]
 
     # Creating new blog
     def post(self, request, *args, **kwargs):
@@ -169,6 +171,7 @@ class CreateBlog(generics.ListAPIView, mixins.CreateModelMixin):
 class SingleBlogSection(generics.ListAPIView,mixins.RetrieveModelMixin,mixins.UpdateModelMixin,mixins.DestroyModelMixin):
     queryset = BlogSection.objects.all()
     serializer_class = BlogSectionSerializer
+    permission_classes = [IsAuthenticated]
 
     # get blog
     def get(self, request, *args, **kwargs):
@@ -190,6 +193,7 @@ class GetBlogList(generics.ListAPIView):
 class CreateBlogSection(generics.ListAPIView, mixins.CreateModelMixin):
     queryset = BlogSection.objects.all()
     serializer_class = BlogSectionSerializer
+    permission_classes = [IsAuthenticated]
 
     # Creating new blog
     def post(self, request, *args, **kwargs):
@@ -200,6 +204,7 @@ class CreateBlogSection(generics.ListAPIView, mixins.CreateModelMixin):
     parser_classes = [MultiPartParser,JSONParser]
     queryset = BlogSection.objects.all()
     serializer_class = BlogSectionSerializer
+    permission_classes = [IsAuthenticated]
 
     # Creating new blog
     def post(self, request, *args, **kwargs):
@@ -210,6 +215,7 @@ class CreateMediaGroupBlogSection(generics.ListAPIView, mixins.CreateModelMixin)
     parser_classes = [MultiPartParser,JSONParser]
     queryset = MediaGroupSection.objects.all()
     serializer_class = MediaGroupSectionSerializer
+    permission_classes = [IsAuthenticated]
 
     # Creating new blog
     def post(self, request, *args, **kwargs):
@@ -219,6 +225,7 @@ class CreateMediaGroupBlogSection(generics.ListAPIView, mixins.CreateModelMixin)
 class DeleteMediaGroupBlogSection(generics.ListAPIView, mixins.DestroyModelMixin):
     queryset = MediaGroupSection.objects.all()
     serializer_class = MediaGroupSectionSerializer
+    permission_classes = [IsAuthenticated]
 
     def delete(self,request, *args, **kwargs):
         return self.destroy(request,*args,**kwargs)

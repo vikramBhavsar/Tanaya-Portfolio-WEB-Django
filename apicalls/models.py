@@ -3,6 +3,10 @@ from django.db import models
 from datetime import datetime
 from django.utils import timezone
 import os
+import sys
+from django.core.files.uploadedfile import InMemoryUploadedFile
+from io import BytesIO
+from PIL import Image
 
 
 # Create your models here.
@@ -36,6 +40,41 @@ class MediaContent(models.Model):
     sectionID = models.ForeignKey(Section,on_delete=models.CASCADE,related_name="mediaContent")
 
 
+    def save(self,*args, **kwargs):
+        # Opening the uploaded image
+        if self.mediaFile:
+
+            try:
+                im = Image.open(self.mediaFile)
+
+                output = BytesIO()
+
+                # Resize/modify the image
+                initialWidth, initialHeight = im.size
+
+                ratio = initialWidth / 1000
+                calWidth = round(initialWidth / ratio)
+                calHeight = round(initialHeight / ratio)
+                
+                # resize it to new size
+                im = im.resize((calWidth, calHeight))
+
+                # after modifications, save it to the output
+                im.save(output, format='JPEG', quality=60)
+                output.seek(0)
+
+                # change the imagefield value to be the newley modifed image value
+                self.mediaFile = InMemoryUploadedFile(output, 'mediaFile', "%s.jpg" % self.mediaFile.name.split('.')[0], 'image/jpeg',
+                                                sys.getsizeof(output), None)
+            except Exception:
+                print("Exception Caught %s" % Exception)
+
+        super(MediaContent, self).save()
+
+
+    
+
+
 
 
 ####### For Art Education #####
@@ -62,7 +101,38 @@ class ArtMediaContent(models.Model):
     videoUrl = models.TextField(default="",blank=True)
     projectID = models.ForeignKey(ArtProject,on_delete=models.CASCADE,related_name="art_media")
 
+    # https://stackoverflow.com/questions/52183975/how-to-compress-the-image-before-uploading-to-s3-in-django
+    def save(self,*args, **kwargs):
 
+        # Opening the uploaded image
+        if self.mediaFile:
+
+            try:
+                im = Image.open(self.mediaFile)
+
+                output = BytesIO()
+
+                # Resize/modify the image
+                initialWidth, initialHeight = im.size
+
+                ratio = initialWidth / 1000
+                calWidth = round(initialWidth / ratio)
+                calHeight = round(initialHeight / ratio)
+                
+                # resize it to new size
+                im = im.resize((calWidth, calHeight))
+
+                # after modifications, save it to the output
+                im.save(output, format='JPEG', quality=60)
+                output.seek(0)
+
+                # change the imagefield value to be the newley modifed image value
+                self.mediaFile = InMemoryUploadedFile(output, 'mediaFile', "%s.jpg" % self.mediaFile.name.split('.')[0], 'image/jpeg',
+                                                sys.getsizeof(output), None)
+            except Exception:
+                print("Exception Caught %s" % Exception)
+
+        super(ArtMediaContent, self).save()
 
 
 
@@ -85,6 +155,8 @@ class Blog(models.Model):
     def __str__(self) -> str:
         return self.blogName
 
+    
+
 
 class BlogSection(models.Model):
     blogID = models.ForeignKey(Blog,on_delete=models.CASCADE,related_name='blog_sections')
@@ -97,6 +169,38 @@ class BlogSection(models.Model):
 
     def __str__(self) -> str:
         return self.sectionText[:10] + '.. ' + str(self.pk)
+
+    def save(self,*args, **kwargs):
+
+        # Opening the uploaded image
+        if self.mediaURL:
+
+            try:
+                im = Image.open(self.mediaURL)
+
+                output = BytesIO()
+
+                # Resize/modify the image
+                initialWidth, initialHeight = im.size
+
+                ratio = initialWidth / 1000
+                calWidth = round(initialWidth / ratio)
+                calHeight = round(initialHeight / ratio)
+                
+                # resize it to new size
+                im = im.resize((calWidth, calHeight))
+
+                # after modifications, save it to the output
+                im.save(output, format='JPEG', quality=60)
+                output.seek(0)
+
+                # change the imagefield value to be the newley modifed image value
+                self.mediaURL = InMemoryUploadedFile(output, 'mediaURL', "%s.jpg" % self.mediaURL.name.split('.')[0], 'image/jpeg',
+                                                sys.getsizeof(output), None)
+            except Exception:
+                print("Exception Caught %s" % Exception)
+
+        super(BlogSection, self).save()
 
     class Meta:
         ordering = ['pk','timestamp']
@@ -117,6 +221,39 @@ class MediaGroupSection(models.Model):
     mediaURL = models.ImageField(upload_to='blogs/%H_%M_%S_%f',blank=True)
     mediaDes= models.CharField(max_length=500,blank=True)
 
+    def save(self,*args, **kwargs):
+
+        # Opening the uploaded image
+        if self.mediaURL:
+
+            try:
+                im = Image.open(self.mediaURL)
+
+                output = BytesIO()
+
+                # Resize/modify the image
+                initialWidth, initialHeight = im.size
+
+                ratio = initialWidth / 1000
+                calWidth = round(initialWidth / ratio)
+                calHeight = round(initialHeight / ratio)
+                
+                # resize it to new size
+                im = im.resize((calWidth, calHeight))
+
+                # after modifications, save it to the output
+                im.save(output, format='JPEG', quality=60)
+                output.seek(0)
+
+                # change the imagefield value to be the newley modifed image value
+                self.mediaURL = InMemoryUploadedFile(output, 'mediaURL', "%s.jpg" % self.mediaURL.name.split('.')[0], 'image/jpeg',
+                                                sys.getsizeof(output), None)
+            except Exception:
+                print("Exception Caught %s" % Exception)
+
+        super(MediaGroupSection, self).save()
+
+
 
 def update_about_filename(instance, filename):
     ext = filename.split('.')[-1]
@@ -131,4 +268,39 @@ class About(models.Model):
 
     def __str__(self) -> str:
         return str(self.pk) + ' ' + self.about_heading
+
+    def save(self,*args, **kwargs):
+
+        # Opening the uploaded image
+        if self.mediaFile:
+
+            try:
+                im = Image.open(self.mediaFile)
+
+                output = BytesIO()
+
+                # Resize/modify the image
+                initialWidth, initialHeight = im.size
+
+                ratio = initialWidth / 1000
+                calWidth = round(initialWidth / ratio)
+                calHeight = round(initialHeight / ratio)
+                
+                # resize it to new size
+                im = im.resize((calWidth, calHeight))
+
+                # after modifications, save it to the output
+                im.save(output, format='JPEG', quality=60)
+                output.seek(0)
+
+                # change the imagefield value to be the newley modifed image value
+                self.mediaFile = InMemoryUploadedFile(output, 'mediaFile', "%s.jpg" % self.mediaFile.name.split('.')[0], 'image/jpeg',
+                                                sys.getsizeof(output), None)
+            except Exception:
+                print("Exception Caught %s" % Exception)
+
+        super(About, self).save()
+
+
+    
     
