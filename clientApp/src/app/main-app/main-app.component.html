@@ -1,0 +1,147 @@
+<div class="container">
+  <div class="phone-menu">
+    <button (click)="TogglePhoneMenu()" class="phone-menu-btn">
+      <div *ngIf="hamburger; then barsBlock; else crossBlock"></div>
+      <ng-template #crossBlock><i class="fa-solid fa-bars"></i></ng-template>
+      <ng-template #barsBlock><i class="fa-solid fa-xmark"></i></ng-template>
+    </button>
+  </div>
+
+
+
+  <div class="phone-side-bar" #phone_side_menu>
+    <div class="side-bar-menu">
+      <ul>
+        <li>
+          <a routerLink="/home">Home</a>
+        </li>
+
+        <li>
+          <a routerLink="about" (click)="switchChild(true)">About</a>
+        </li>
+        <li>
+          <div
+            *ngIf="
+              galleryActive;
+              then phoneGalleryBlock;
+              else phoneNonGalleryBlock
+            "
+          ></div>
+          <ng-template #phoneGalleryBlock>
+            <h3>Gallery</h3>
+
+            <ul *ngFor="let proj of projectList">
+              <li>
+                <a
+                  (click)="switchProject(proj.id,true)"
+                  [routerLink]="['gallery', proj.id]"
+                  [ngClass]="{ active: proj.id == curProject }"
+                  >{{ proj.projectName }}</a
+                >
+              </li>
+            </ul>
+          </ng-template>
+          <ng-template #phoneNonGalleryBlock>
+            <a [routerLink]="['/T/gallery','0']">Gallery</a>
+          </ng-template>
+        </li>
+
+        <li>
+          <a routerLink="/art-education" (click)="switchChild(true)">Art Education</a>
+        </li>
+
+        <li>
+          <a routerLink="/project-rants" (click)="switchChild(true)">Project/Rants</a>
+        </li>
+
+        <li>
+          <a routerLink="contact" (click)="switchChild(true)">Contact</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="divide-section">
+    <div class="side-bar">
+      <ul>
+        <li>
+          <div class="main-header">
+            <a routerLink="/home"><img src="assets/Images/tanaya_name.png" alt="" /></a>
+            <!-- <a routerLink="/home">Tanaya</a> -->
+          </div>
+        </li>
+
+        <li *ngIf="access.length > 0">
+          <a routerLink="/projects-mngm">My Projects</a>
+        </li>
+
+        <li>
+          <a routerLink="about">About</a>
+        </li>
+        <li>
+          <div
+            *ngIf="galleryActive; then galleryBlock; else nonGalleryBlock"
+          ></div>
+          <ng-template #galleryBlock>
+            <h3>Gallery</h3>
+
+            <ul *ngFor="let proj of projectList">
+              <li>
+                <a
+                  (click)="switchProject(proj.id)"
+                  [routerLink]="['gallery', proj.id]"
+                  [ngClass]="{ active: proj.id == curProject }"
+                  >{{ proj.projectName }}</a
+                >
+              </li>
+            </ul>
+          </ng-template>
+          <ng-template #nonGalleryBlock>
+            <a [routerLink]="['/T/gallery',projectList[0].id]">Gallery</a>
+          </ng-template>
+        </li>
+
+        <li>
+
+          <div
+          *ngIf="artEducationActive; then ArtProjectBlock; else nonArtProjectBlock"
+        ></div>
+        <ng-template #ArtProjectBlock>
+          <h3>Art Education</h3>
+
+          <ul *ngFor="let artProj of artProjectList">
+            <li>
+              <a
+                (click)="switchArtProject(artProj.id)"
+                [routerLink]="['/T/art-education', artProj.id]"
+                [ngClass]="{ active: artProj.id == curArtproject }"
+                >{{ artProj.projectName }}</a
+              >
+            </li>
+          </ul>
+        </ng-template>
+        <ng-template #nonArtProjectBlock>
+          <a [routerLink]="['/T/art-education',artProjectList[0].id]">Art Education</a>
+        </ng-template>
+        </li>
+
+        <li>
+          <a routerLink="project-rants">Project/Rants</a>
+        </li>
+
+        <li>
+          <a routerLink="contact">Contact</a>
+        </li>
+
+        <li *ngIf="access.length > 0">
+          <a (click)="logout()">Logout</a>
+        </li>
+      </ul>
+    </div>
+
+    <!-- here will contain all child components -->
+    <div class="main-app-child-container">
+      <router-outlet></router-outlet>
+    </div>
+  </div>
+</div>
