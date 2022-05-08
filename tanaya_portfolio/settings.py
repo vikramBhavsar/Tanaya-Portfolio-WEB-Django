@@ -14,6 +14,7 @@ from pathlib import Path
 from datetime import timedelta
 import os
 from dotenv import load_dotenv
+from decouple import config
 
 load_dotenv()
 
@@ -105,9 +106,6 @@ AWS_S3_REGION_NAME = "ap-south-1"
 
 AWS_S3_ADDRESSING_STYLE = "virtual"
 
-print("printing bucket name=============")
-print(AWS_STORAGE_BUCKET_NAME)
-
 WSGI_APPLICATION = 'tanaya_portfolio.wsgi.application'
 
 
@@ -118,8 +116,12 @@ WSGI_APPLICATION = 'tanaya_portfolio.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': config("DATABASE_NAME"),
+        'USER': config("DATABASE_USER"),
+        'PASSWORD': config("DATABASE_PASSWORD"),
+        'HOST': config("DATABASE_HOST"),
+        'PORT': config("DATABASE_PORT")
     }
 }
 
