@@ -1,6 +1,6 @@
 #!/bin/bash
 
-cd /quantAlgo/clientApp
+cd /tanayaPortfolio/clientApp
 echo "Installing node packages"
 npm install
 echo "building the application"
