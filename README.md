@@ -1,2 +1,2 @@
-# Tanaya's Backend Server in Django
+# Tanaya's Backend Server in Django (amazing)
 
