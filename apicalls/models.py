@@ -165,7 +165,7 @@ class BlogSection(models.Model):
     mediaURL = models.ImageField(upload_to=update_blog_filename,blank=True)
     mediaDes= models.CharField(max_length=500,blank=True)
     videoURL = models.TextField(default="",blank=True)
-    timestamp = models.DateTimeField(default=timezone.now())
+    timestamp = models.DateTimeField(auto_now_add=True)
 
     def __str__(self) -> str:
         return self.sectionText[:10] + '.. ' + str(self.pk)

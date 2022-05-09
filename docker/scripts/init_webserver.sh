@@ -2,13 +2,13 @@
 
 cd /tanayaPortfolio/clientApp
 echo "Installing node packages"
-npm install
+yarn install
 echo "building the application"
 npm run build-watch
 
 chmod +x /tanayaPortfolio
 chmod +x /tanayaPortfolio/staticfiles
-cp /tanayaPortfolio/clientApp/dist/clientApp/* /usr/share/nginx/html
+cp -r /tanayaPortfolio/clientApp/dist/tanaya-artist-portfolio/* /usr/share/nginx/html
 cp /tanayaPortfolio/clientApp/nginx.conf /etc/nginx/nginx.conf
 
 nginx -s reload
