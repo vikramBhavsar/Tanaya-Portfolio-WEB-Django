@@ -37,21 +37,21 @@ export class MainAppComponent implements OnInit {
 
 
   projectList: ProjectModel[] = [{
-    "id": "1",
+    "id": "-1",
     "projectName": "Fragments",
     "projectDescription": "",
   }]
 
 
   artProjectList:ArtProjects[]=[{
-    "id": "1",
+    "id": "-1",
     "projectName": "NGMA",
     "projectDescription": "",
   }]
 
 
   blogs:Blog[]=[{
-    "id": "1",
+    "id": "-1",
     "blogName": "NGMA",
     "isPublished": false,
   }]

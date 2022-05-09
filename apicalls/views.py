@@ -157,6 +157,13 @@ class SingleBlog(generics.ListAPIView,mixins.RetrieveModelMixin,mixins.DestroyMo
     def delete(self, request, *args, **kwargs):
         return self.destroy(request,*args,**kwargs)
 
+
+class ListBlog(generics.ListAPIView):
+    queryset = Blog.objects.all()
+    serializer_class = BlogSerializer
+
+
+
 class CreateBlog(generics.ListAPIView, mixins.CreateModelMixin):
     queryset = Blog.objects.all()
     serializer_class = BlogSerializer

@@ -42,7 +42,7 @@
             </ul>
           </ng-template>
           <ng-template #phoneNonGalleryBlock>
-            <a [routerLink]="['/T/gallery', '0']">Gallery</a>
+            <a [routerLink]="['/T/gallery', '-1']">Gallery</a>
           </ng-template>
         </li>
 
@@ -71,7 +71,7 @@
           </ul>
         </ng-template>
         <ng-template #phonenonArtProjectBlock>
-          <a [routerLink]="['/T/art-education', artProjectList[0].id]"
+          <a [routerLink]="['/T/art-education', '-1']"
             >Art Education</a
           >
         </ng-template>
@@ -100,7 +100,7 @@
           </ul>
         </ng-template>
         <ng-template #phoneNonBlogProjectBlock>
-          <a [routerLink]="['/T/project-rants', blogs[0].id]"
+          <a [routerLink]="['/T/project-rants', '-1']"
             >Project's/Journal</a
           >
         </ng-template>
@@ -153,7 +153,7 @@
           </ul>
         </ng-template>
         <ng-template #nonBlogMgmnProjectBlock>
-          <a [routerLink]="['/T/blog-mngm', blogs[0].id]"
+          <a [routerLink]="['/T/blog-mngm', '-1']"
             >Blog Management</a
           >
         </ng-template>
@@ -183,7 +183,7 @@
             </ul>
           </ng-template>
           <ng-template #nonGalleryBlock>
-            <a [routerLink]="['/T/gallery', projectList[0].id]">Gallery</a>
+            <a [routerLink]="['/T/gallery', '-1']">Gallery</a>
           </ng-template>
         </li>
 
@@ -211,7 +211,7 @@
             </ul>
           </ng-template>
           <ng-template #nonArtProjectBlock>
-            <a [routerLink]="['/T/art-education', artProjectList[0].id]"
+            <a [routerLink]="['/T/art-education', '-1']"
               >Art Education</a
             >
           </ng-template>
@@ -242,7 +242,7 @@
           </ul>
         </ng-template>
         <ng-template #nonBlogProjectBlock>
-          <a [routerLink]="['/T/project-rants', blogs[0].id]"
+          <a [routerLink]="['/T/project-rants', '-1']"
             >Project's/Journal</a
           >
         </ng-template>
