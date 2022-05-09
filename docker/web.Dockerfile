@@ -106,4 +106,4 @@ RUN mkdir /tanayaPortfolio/staticfiles
 EXPOSE 80
 EXPOSE 443
 
-ENTRYPOINT ["/tanayaPortfolio/docker/scripts/init_webserver.sh"]
+ENTRYPOINT ["chmod", "+x", "/tanayaPortfolio/docker/scripts/init_webserver.sh"]

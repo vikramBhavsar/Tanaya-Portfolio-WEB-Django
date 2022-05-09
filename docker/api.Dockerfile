@@ -28,4 +28,4 @@ WORKDIR /tanayaPortfolio
 
 EXPOSE 8000
 
-ENTRYPOINT ["docker/scripts/init_api.sh"]
+ENTRYPOINT ["chmod", "+x","docker/scripts/init_api.sh"]
