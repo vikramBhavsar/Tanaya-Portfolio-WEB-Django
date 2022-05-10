@@ -5,13 +5,13 @@ import { Subject, Observable, BehaviorSubject } from 'rxjs';
   providedIn: 'root',
 })
 export class GalleryProjectIDService {
-  private projectID = new BehaviorSubject<string>('0');
+  private projectID = new BehaviorSubject<string>('-1');
 
-  private artProjectID = new BehaviorSubject<string>('0');
+  private artProjectID = new BehaviorSubject<string>('-1');
 
-  private blogID = new BehaviorSubject<string>('0');
+  private blogID = new BehaviorSubject<string>('-1');
 
-  private blogMgmnID = new BehaviorSubject<string>('0');
+  private blogMgmnID = new BehaviorSubject<string>('-1');
 
   constructor() {}
 

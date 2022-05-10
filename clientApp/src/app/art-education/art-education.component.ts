@@ -30,7 +30,7 @@ export class ArtEducationComponent implements OnInit {
   curImgStatus: string = 'some wonderful text';
 
   artProject: ArtProjectMain = {
-    "id":"1",
+    "id":"-1",
     "art_media":[],
     "projectDescription":"temp",
     "projectName":"temp"
@@ -49,16 +49,19 @@ export class ArtEducationComponent implements OnInit {
   // Gets the Art data required to show the images
   initializerArtData(){
 
-    let that = this;
-    this.artEducationService.getArtEducationProjectDetails(this.curArtProject).subscribe({
-      next(res){
-        that.artProject = res;
-      },
-      error(msg){
-        // alert(`Error occurred: ${msg.status} : ${msg.details}`)
-        console.log(msg);
-      }
-    });
+    if(this.curArtProject != '-1'){
+      let that = this;
+      this.artEducationService.getArtEducationProjectDetails(this.curArtProject).subscribe({
+        next(res){
+          that.artProject = res;
+        },
+        error(msg){
+          // alert(`Error occurred: ${msg.status} : ${msg.details}`)
+          console.log(msg);
+        }
+      });
+    }
+
   }
 
 

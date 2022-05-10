@@ -37,7 +37,7 @@ export class BlogMngmComponent implements OnInit {
   blogName = new FormControl('');
 
   currentBlog: BlogDetails = {
-    id: '0',
+    id: '-1',
     blogName: '',
     blog_sections: [],
     isPublished: false,
@@ -317,16 +317,18 @@ export class BlogMngmComponent implements OnInit {
   }
 
   initializerBlogData() {
-    let that = this;
-    this.blogService.getSingleBlogDetails(this.curBlog).subscribe({
-      next(res) {
-        that.currentBlog = res;
-      },
-      error(msg) {
-        alert(`Error occurred: ${msg.status} : ${msg.details}`);
-        console.log(msg);
-      },
-    });
+    if(this.curBlog != '-1'){
+      let that = this;
+      this.blogService.getSingleBlogDetails(this.curBlog).subscribe({
+        next(res) {
+          that.currentBlog = res;
+        },
+        error(msg) {
+          alert(`Error occurred: ${msg.status} : ${msg.details}`);
+          console.log(msg);
+        },
+      });
+    }
   }
 
   // Miscelenius code

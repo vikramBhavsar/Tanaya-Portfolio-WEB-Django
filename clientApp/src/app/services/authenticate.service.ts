@@ -13,11 +13,11 @@ export class AuthenticateService {
   url:string = environment.baseServerURL;
 
   performLogin(username:string,password:string): Observable<any>{
-    return this.http.post(this.url + 'auth/token',{username,password}); 
+    return this.http.post(this.url + 'token',{username,password}); 
   }
 
 
   refreshToken(refresh:string): Observable<any>{
-    return this.http.post(this.url+'auth/refresh',{refresh:refresh});
+    return this.http.post(this.url+'refresh',{refresh:refresh});
   }
 }

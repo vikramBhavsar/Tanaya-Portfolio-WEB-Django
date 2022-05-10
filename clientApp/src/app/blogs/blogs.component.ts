@@ -42,22 +42,25 @@ export class BlogsComponent implements OnInit {
 
   initializerBlogData() {
 
-    try {
-      let that = this;
-      this.blogService.getSingleBlogDetails(this.curBlog).subscribe({
-        next(res) {
-          that.blogProject = res;
-          console.log(that.blogProject);
-        },
-        error(msg) {
-          // alert(`Error occurred: ${msg.status} : ${msg.details}`)
-          console.log(msg);
-        },
-      });
-      
-    } catch (error) {
-      
+
+    if(this.curBlog != '-1'){
+      try {
+        let that = this;
+        this.blogService.getSingleBlogDetails(this.curBlog).subscribe({
+          next(res) {
+            that.blogProject = res;
+            console.log(that.blogProject);
+          },
+          error(msg) {
+            // alert(`Error occurred: ${msg.status} : ${msg.details}`)
+            console.log(msg);
+          },
+        });
+        
+      } catch (error) {
+      }
     }
+
   }
 
   // Function to open image
