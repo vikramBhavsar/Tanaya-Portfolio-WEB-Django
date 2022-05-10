@@ -32,14 +32,14 @@ export class GalleryComponent implements OnInit {
   @ViewChild('imgModal') imgModal!: ElementRef;
 
   // **** VARIABLES USED FOR OPENING THE IMAGE PROPERLY
-  curImgLink: string = '../../assets/Images/Fragments/IMG_2219.JPG';
+  curImgLink: string = '/assets/Images/bg_1.png';
   curImgStatus: string = 'some wonderful text';
 
   // **** VARIABLES FOR PROJECT SELECTION SECTION WISE **** //
   curProject: string = '';
 
   projectGLRY :ProjectGLRY = {
-    "id": "1",
+    "id": "-1",
     "projectName": "Fragments",
     "projectDescription": "",
     "sections":[],
@@ -63,20 +63,23 @@ export class GalleryComponent implements OnInit {
   }
 
   initializerGalleryData() {
-    
-    let that = this;
+    if(this.curProject.toString() != '-1'){
+      let that = this;
 
-    this.galleryService.getGalleryData(this.curProject.toString()).subscribe({
-      next(res){
-        that.projectGLRY = that.processResultsForLayout(res);
-        console.log(res);
-        console.log("Below is Server Data received: ");
-        console.log(that.projectGLRY);
-      },
-      error(msg){
-        console.log(msg);
-      }
-    })
+      this.galleryService.getGalleryData(this.curProject.toString()).subscribe({
+        next(res){
+          that.projectGLRY = that.processResultsForLayout(res);
+          console.log(res);
+          console.log("Below is Server Data received: ");
+          console.log(that.projectGLRY);
+        },
+        error(msg){
+          console.log(msg);
+        }
+      })
+
+    }
+    
   }
 
 
