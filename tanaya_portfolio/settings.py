@@ -64,7 +64,7 @@ MIDDLEWARE = [
 
 
 # CSRF 
-CSRF_TRUSTED_ORIGINS = config("ALLOWED_HOSTS", cast=lambda v: [s.strip() for s in v.split(',')])
+CSRF_TRUSTED_ORIGINS = config("CORS_ALLOWED_ORIGINS", cast=lambda v: [s.strip() for s in v.split(',')])
 
 # CORS policy - allowing only certain links
 CORS_ORIGIN_ALLOW_ALL = False
