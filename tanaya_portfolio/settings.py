@@ -47,7 +47,7 @@ INSTALLED_APPS = [
     'apicalls',
     'rest_framework_simplejwt',
     'django_cleanup.apps.CleanupConfig',
-    'storages'
+    'storages',
     'corsheaders',
 ]
 
